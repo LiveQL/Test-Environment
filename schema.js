@@ -8,7 +8,7 @@ const data = require('./database');
 // Type definitions.
 const typeDefs = `
   # Define "live" directive in the schema.
-  directive @live on FIELD_DEFINITION
+  directive @live on FIELD_DEFINITION | FIELD | QUERY
 
   # Queries that can be live should be marked with "@live" on the schema.
   type Query {
