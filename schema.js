@@ -1,5 +1,6 @@
 const { makeExecutableSchema } = require('graphql-tools');
 const data = require('./database');
+const { liveResolver } = require('./lib/package');
 
 /**
  * ---------- GraphQL SCHEMA ----------
@@ -8,11 +9,11 @@ const data = require('./database');
 // Type definitions.
 const typeDefs = `
   # Define "live" directive in the schema.
-  directive @live on FIELD_DEFINITION | FIELD | QUERY
+  directive @live on FIELD_DEFINITION
 
   # Queries that can be live should be marked with "@live" on the schema.
   type Query {
-    Topics: [Topic]
+    Topics: [Topic] @live
     Topic(id: ID!): Topic @live
     Comments: [Comment]
     Comment(id: ID!): Comment
@@ -26,19 +27,20 @@ const typeDefs = `
     deleteComment(id: ID!): Comment @live
   }
 
+  # Fields that can be live should be marked with @live in the schema.
   type Topic {
-    id: ID!
-    author: String!
-    text: String!
-    comments: [Comment]
+    id: ID! @live
+    author: String! @live
+    text: String! @live
+    comments: [Comment] @live
   }
   
   # A dependency needs to have a reference to its parent. 
   type Comment {
-    id: ID!
-    author: String!
-    text: String!
-    topic: Topic
+    id: ID! @live
+    author: String! @live
+    text: String! @live
+    topic: Topic  @live
   }
 `;
 
@@ -141,5 +143,9 @@ resolvers.Comment = {
   },
 };
 
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+const directiveResolvers = {
+  live: liveResolver,
+};
+
+module.exports = makeExecutableSchema({ typeDefs, resolvers, directiveResolvers });
 

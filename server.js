@@ -8,14 +8,11 @@ const schema = require('./schema');
 
 const app = express();
 
-// Set LiveQL config.
-liveql.config.set();
-
 app.use(bodyParser.json());
 
 // bodyParser is needed just for POST.
 app.use('/graphql', liveql.process, liveql.server({ schema }));
-app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' })); 
+app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 app.listen(5000);
 console.log('Listening on port 5000');
