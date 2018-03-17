@@ -11,6 +11,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // bodyParser is needed just for POST.
+
 app.use('/graphql', liveql.process, liveql.server({ schema }));
 app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 

@@ -4,9 +4,9 @@
 const data = {
   uid: { nextTopic: 4, nextComment: 10 },
   Topic: {
-    1: { author: 'Xavry', text: 'I love Portland.', comments: [1, 2, 3] },
-    2: { author: 'Xavry', text: 'I love IPAs.', comments: [4, 5, 6] },
-    3: { author: 'Xavry', text: 'Drink local or not at all.', comments: [7, 8, 9] },
+    1: { author: 'Xavyr', text: 'I love Portland.', comments: [1, 2, 3] },
+    2: { author: 'Xavyr', text: 'I love IPAs.', comments: [4, 5, 6] },
+    3: { author: 'Xavyr', text: 'Drink local or not at all.', comments: [7, 8, 9] },
   },
   Comment: {
     1: { author: 'Eric', text: 'No waves... Left swipe.', topic: 1 },

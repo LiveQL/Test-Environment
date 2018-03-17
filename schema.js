@@ -1,34 +1,15 @@
-const { makeExecutableSchema, SchemaDirectiveVisitor } = require('graphql-tools');
+const { makeExecutableSchema } = require('graphql-tools');
 const data = require('./database');
 const { liveResolver } = require('./lib/package');
+
 /**
  * ---------- GraphQL SCHEMA ----------
  */
 
-console.log(SchemaDirectiveVisitor);
-
-/**
- * 
- * Testing new Apollo stuff.
-//  */
-// class LiveDirective extends SchemaDirectiveVisitor {
-//   visitFieldDefinition(field) {
-//     console.log(field);
-//     field.resolve = liveResolver(...args);
-//   };
-//   visitField(field) {
-//     console.log(field);
-//     field.resolve = liveResolver(...args);
-//   };
-//   visitQuery(filed) {
-//     console.log(field);
-//     field.resolve = liveResolver(...args);
-//   };
-// };
 // Type definitions.
 const typeDefs = `
   # Define "live" directive in the schema.
-  directive @live on FIELD_DEFINITION | FIELD | QUERY
+  directive @live on FIELD_DEFINITION
 
   # Queries that can be live should be marked with "@live" on the schema.
   type Query {
@@ -80,7 +61,6 @@ resolvers.Query = {
   },
   Topic: (_, { id }) => {
     const resolve = { ...data.Topic[id] };
-    resolve.id = id;
     return resolve;
   },
   Comments: () => {
@@ -139,6 +119,7 @@ resolvers.Mutation = {
   },
 };
 resolvers.Topic = {
+  id: ({ id }) => 'Topic' + id,
   comments: ({ comments }) => {
     const resolve = [];
     const commentData = { ...data.Comment };
@@ -154,7 +135,8 @@ resolvers.Topic = {
 // A dependency needs to return it's parent in the event of a mutation. If a comment
 // is updated. The topic it's a comment to should be returned.
 resolvers.Comment = {
-  topic: ({ id }) => {
+  id: ({ id }) => 'Comment' + id,
+  topic: ({ id }) => { 
     const comment = { ...data.Comment[id] };
     const resolve = { ...data.Topic[comment.topic] };
     resolve.id = comment.topic;
@@ -162,9 +144,9 @@ resolvers.Comment = {
   },
 };
 
-// const directiveResolvers = {
-//   live: liveResolver,
-// };
+const directiveResolvers = {
+  live: liveResolver,
+};
 
-module.exports = makeExecutableSchema({ typeDefs, resolvers, schemaDirectives: { LiveDirective } });
+module.exports = makeExecutableSchema({ typeDefs, resolvers, directiveResolvers });
 
