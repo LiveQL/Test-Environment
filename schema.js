@@ -1,15 +1,33 @@
-const { makeExecutableSchema } = require('graphql-tools');
+const { makeExecutableSchema, SchemaDirectiveVisitor } = require('graphql-tools');
 const data = require('./database');
 const { liveResolver } = require('./lib/package');
-
 /**
  * ---------- GraphQL SCHEMA ----------
  */
 
+console.log(SchemaDirectiveVisitor);
+
+/**
+ * Testing new Apollo stuff.
+//  */
+// class LiveDirective extends SchemaDirectiveVisitor {
+//   visitFieldDefinition(field) {
+//     console.log(field);
+//     field.resolve = liveResolver(...args);
+//   };
+//   visitField(field) {
+//     console.log(field);
+//     field.resolve = liveResolver(...args);
+//   };
+//   visitQuery(filed) {
+//     console.log(field);
+//     field.resolve = liveResolver(...args);
+//   };
+// };
 // Type definitions.
 const typeDefs = `
   # Define "live" directive in the schema.
-  directive @live on FIELD_DEFINITION
+  directive @live on FIELD_DEFINITION | FIELD | QUERY
 
   # Queries that can be live should be marked with "@live" on the schema.
   type Query {
@@ -147,5 +165,5 @@ const directiveResolvers = {
   live: liveResolver,
 };
 
-module.exports = makeExecutableSchema({ typeDefs, resolvers, directiveResolvers });
+module.exports = makeExecutableSchema({ typeDefs, resolvers, schemaDirectives: { LiveDirective } });
 
