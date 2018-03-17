@@ -8,6 +8,7 @@ const { liveResolver } = require('./lib/package');
 console.log(SchemaDirectiveVisitor);
 
 /**
+ * 
  * Testing new Apollo stuff.
 //  */
 // class LiveDirective extends SchemaDirectiveVisitor {
