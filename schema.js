@@ -161,9 +161,9 @@ resolvers.Comment = {
   },
 };
 
-const directiveResolvers = {
-  live: liveResolver,
-};
+// const directiveResolvers = {
+//   live: liveResolver,
+// };
 
 module.exports = makeExecutableSchema({ typeDefs, resolvers, schemaDirectives: { LiveDirective } });
 
