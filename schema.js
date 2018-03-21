@@ -1,6 +1,6 @@
 const { makeExecutableSchema } = require('graphql-tools');
 const data = require('./database');
-const { liveResolver } = require('./lib/package');
+const { liveqlResolver } = require('liveql');
 
 /**
  * ---------- GraphQL SCHEMA ----------
@@ -145,7 +145,7 @@ resolvers.Comment = {
 };
 
 const directiveResolvers = {
-  live: liveResolver,
+  live: liveqlResolver,
 };
 
 module.exports = makeExecutableSchema({ typeDefs, resolvers, directiveResolvers });
